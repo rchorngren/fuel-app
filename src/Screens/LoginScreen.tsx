@@ -6,14 +6,13 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 const LoginScreen = () => {
   const [userName, setUserName] = useState('robert@horngren.net');
   const [password, setPassword] = useState('1234Aa');
-  const [loginStatus, setLoginStatus] = useState('');
 
   const auth = getAuth();
 
   const loginUser = (userName: string, password: string) => {
     signInWithEmailAndPassword(auth, userName, password)
       .then((userCredentials) => {
-        console.log('Signed in: ', userCredentials.user.email);
+        console.log('Signed in: ', userCredentials.user);
       })
       .catch((error) => {
         console.log('There was an error while signing in: ', error)
