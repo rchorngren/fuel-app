@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, StyleSheet, TextInput } from "react-native";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Context } from "../context/Context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
@@ -8,22 +8,28 @@ import { LandingScreens } from "../helpers/types";
 interface ILoginView extends NativeStackScreenProps<LandingScreens, "LoginView"> { }
 
 const LoginView: React.FC<ILoginView> = (props) => {
-  const [userName, setUserName] = useState('robert@horngren.net');
-  const [password, setPassword] = useState('1234Aa');
+  const [userName, setUserName] = useState<string>('');
+  const [password, setPassword] = useState('');
 
   const context = useContext(Context);
 
   const auth = getAuth();
 
   const loginUser = (userName: string, password: string) => {
-    signInWithEmailAndPassword(auth, userName, password)
-      .then((userCredentials) => {
-        console.log('Signed in: ', userCredentials.user);
-        context?.setAuthed(true);
-      })
-      .catch((error) => {
-        console.log('There was an error while signing in: ', error)
-      })
+    if (userName && password != '') {
+      signInWithEmailAndPassword(auth, userName, password)
+        .then((userCredentials) => {
+          console.log('Signed in: ', userCredentials.user);
+          context?.setAuthed(true);
+        })
+        .catch((error) => {
+          console.log('There was an error while signing in: ', error)
+        })
+    }
+    else {
+      console.log('Please make sure your username and password is filled in correctly');
+    }
+
   }
 
   const toggleRegistration = () => {
@@ -31,17 +37,71 @@ const LoginView: React.FC<ILoginView> = (props) => {
   }
 
   return (
-    <View>
-      <Text>Hello from LoginScreen</Text>
-      <Pressable onPress={() => loginUser(userName, password)}>
-        <Text>Login!</Text>
-      </Pressable>
+    <View style={styles.container}>
 
-      <Pressable onPress={() => toggleRegistration()}>
-        <Text>I wanna register!</Text>
+      <View style={styles.loginView}>
+        <TextInput
+          style={styles.loginInput}
+          placeholder="Användarnamn"
+          keyboardType="email-address"
+          value={userName}
+          onChangeText={setUserName}
+        />
+
+        <TextInput
+          style={styles.loginInput}
+          placeholder="Lösenord"
+          keyboardType="default"
+          secureTextEntry={true}
+          value={password}
+          onChangeText={setPassword}
+        />
+
+        <Pressable style={styles.loginButton} onPress={() => loginUser(userName, password)}>
+          <Text>Logga in</Text>
+        </Pressable>
+
+      </View>
+
+
+
+      <Pressable style={styles.registerButton} onPress={() => toggleRegistration()}>
+        <Text>Registrera ny användare</Text>
       </Pressable>
     </View>
   )
 }
 
 export default LoginView;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  loginView: {
+    width: '90%',
+    alignItems: 'center'
+
+  },
+  loginInput: {
+    height: 31,
+    width: 250,
+    padding: 5,
+    marginBottom: 10,
+    borderWidth: 1,
+  },
+  loginButton: {
+    height: 31,
+    width: 250,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    backgroundColor: 'lightgray'
+  },
+  registerButton: {
+    position: 'absolute',
+    bottom: 35
+  }
+})
