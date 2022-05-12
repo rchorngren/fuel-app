@@ -4,6 +4,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Context } from "../context/Context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { LandingScreens } from "../helpers/types";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface ILoginView extends NativeStackScreenProps<LandingScreens, "LoginView"> { }
 
@@ -15,11 +16,20 @@ const LoginView: React.FC<ILoginView> = (props) => {
 
   const auth = getAuth();
 
+  const storeUser = async (user: any) => {
+    try {
+      await AsyncStorage.setItem('@authed_User', user);
+    } catch (error) {
+      console.log('There was an error while saving the user');
+    }
+  }
+
   const loginUser = (userName: string, password: string) => {
     if (userName && password != '') {
       signInWithEmailAndPassword(auth, userName, password)
         .then((userCredentials) => {
           console.log('Signed in: ', userCredentials.user);
+          storeUser(userCredentials.user);
           context?.setAuthed(true);
         })
         .catch((error) => {
