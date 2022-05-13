@@ -1,39 +1,61 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import React, { useContext, useEffect } from "react";
-import { View, Text, Pressable } from "react-native";
-import { StackScreen } from "../helpers/types";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AuthedScreens, StackScreen } from "../helpers/types";
+import HomeScreen from "./HomeScreen";
+import SettingsScreen from "./SettingsScreen";
 import { Context } from "../context/Context";
-
 
 interface IMainScreen extends NativeStackScreenProps<StackScreen, "MainScreen"> { }
 
 const MainScreen: React.FC<IMainScreen> = (props) => {
-
+  const TabsNavigation = createMaterialTopTabNavigator<AuthedScreens>();
   const context = useContext(Context);
-
-  const logout = async () => {
-    try {
-      await AsyncStorage.removeItem('@authed_User');
-    } catch (error) {
-      console.log('There was an error remove stored user');
-    }
-    context?.setAuthed(false);
-  }
 
   useEffect(() => {
     if (context?.authed === false) {
-      props.navigation.replace("LandingScreen");
+      props.navigation.replace('LandingScreen');
     }
-  }, [context?.authed]);
+  }, [context?.authed])
 
   return (
-    <View>
-      <Text>Hello from MainScreen!</Text>
-      <Pressable onPress={() => logout()}>
-        <Text>Logout</Text>
-      </Pressable>
-    </View>
+    <TabsNavigation.Navigator
+      initialRouteName='HomeScreen'
+      tabBarPosition='bottom'>
+      <TabsNavigation.Screen
+        name='LogScreen'
+        component={HomeScreen}
+        options={{
+          // tabBarIcon: () => { return (<HomeSvg />)},
+          // tabBarActiveTintColor: 'hotpink'
+          // tabBarInactiveTintColor: 'gray'
+          tabBarLabel: "Loggar",
+          // tabBarLabelStyle: styles.tabBarLabel,
+        }} />
+      <TabsNavigation.Screen
+        name='HomeScreen'
+        component={HomeScreen}
+        options={{
+          // tabBarIcon: () => { return (<HomeSvg />)},
+          // tabBarActiveTintColor: 'hotpink'
+          // tabBarInactiveTintColor: 'gray'
+          tabBarLabel: "Hem",
+          // tabBarLabelStyle: styles.tabBarLabel,
+        }} />
+
+      <TabsNavigation.Screen
+        name='SettingsScreen'
+        component={SettingsScreen}
+        // children={() => <SettingsScreen logoutFunction={logout} />}
+        options={{
+          // tabBarIcon: () => { return (<HomeSvg />)},
+          // tabBarActiveTintColor: 'hotpink'
+          // tabBarInactiveTintColor: 'gray'
+          tabBarLabel: "Inställningar",
+          // tabBarLabelStyle: styles.tabBarLabel,
+        }} />
+
+    </TabsNavigation.Navigator>
   )
 }
 

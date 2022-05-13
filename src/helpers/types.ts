@@ -4,6 +4,25 @@ export type StackScreen = {
 }
 
 export type LandingScreens = {
-  LoginView: undefined,
-  RegistrationView: undefined,
+  LoginScreen: undefined,
+  RegistrationScreen: undefined,
+}
+
+export type AuthedScreens = {
+  HomeScreen: undefined,
+  SettingsScreen: undefined,
+  LogScreen: undefined
+}
+
+export type HomeScreens = {
+  HomeOverviewScreen: undefined,
+  SelectedTankScreen: undefined //
+  FuelScreen: undefined,
+  BunkerScreen: undefined
+}
+
+export type SettingsScreens = {
+  SettingsOverviewScreen: undefined
+  CreateScreen: undefined,
+  RemoveScreen: undefined
 }
