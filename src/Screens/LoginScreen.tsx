@@ -51,7 +51,7 @@ const LoginView: React.FC<ILoginView> = (props) => {
   }
 
   const toggleRegistration = () => {
-    props.navigation.replace("RegistrationScreen");
+    props.navigation.navigate("RegistrationScreen");
   }
 
   return (
