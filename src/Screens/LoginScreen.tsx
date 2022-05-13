@@ -92,15 +92,20 @@ const styles = StyleSheet.create({
   },
   loginView: {
     width: '90%',
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingTop: 50,
+    paddingBottom: 50,
+    backgroundColor: 'white'
 
   },
   loginInput: {
     height: 31,
     width: 250,
     padding: 5,
+    borderRadius: 5,
     marginBottom: 10,
     borderWidth: 1,
+    backgroundColor: '#F2F2F2'
   },
   loginButton: {
     height: 31,
@@ -108,6 +113,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
+    borderRadius: 5,
     backgroundColor: 'lightgray'
   },
   registerNavButton: {

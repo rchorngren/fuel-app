@@ -96,6 +96,7 @@ const styles = StyleSheet.create({
     height: 31,
     width: 250,
     padding: 5,
+    borderRadius: 5,
     marginBottom: 10,
     borderWidth: 1,
   },
@@ -105,6 +106,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
+    borderRadius: 5,
     backgroundColor: 'lightgray'
   },
   loginNavButton: {
