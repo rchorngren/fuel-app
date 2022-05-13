@@ -1,10 +1,17 @@
 import React, { useContext, useState } from "react";
-import { View, Text, Pressable, StyleSheet, TextInput } from "react-native";
+import { View, Text, Pressable, StyleSheet, TextInput, Dimensions, Image } from "react-native";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { Context } from "../context/Context";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { LandingScreens } from "../helpers/types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+//@ts-ignore
+import backgroundImg from "../../assets/images/background.png";
+import FuelPump from "../../assets/svg/FuelPump";
+
+
+const screenWidth = Dimensions.get('screen').width;
+const screenHeight = Dimensions.get('screen').height;
 
 interface ILoginView extends NativeStackScreenProps<LandingScreens, "LoginScreen"> { }
 
@@ -48,36 +55,40 @@ const LoginView: React.FC<ILoginView> = (props) => {
 
   return (
     <View style={styles.container}>
+      <Image style={styles.background} source={backgroundImg} />
 
-      <View style={styles.loginView}>
-        <TextInput
-          style={styles.loginInput}
-          placeholder="Användarnamn"
-          keyboardType="email-address"
-          value={userName}
-          onChangeText={setUserName}
-        />
-
-        <TextInput
-          style={styles.loginInput}
-          placeholder="Lösenord"
-          keyboardType="default"
-          secureTextEntry={true}
-          value={password}
-          onChangeText={setPassword}
-        />
-
-        <Pressable style={styles.loginButton} onPress={() => loginUser(userName, password)}>
-          <Text>Logga in</Text>
-        </Pressable>
-
+      <View style={styles.logoContainer}>
+        <FuelPump />
       </View>
 
+      <View style={styles.contentContainer}>
+        <View style={styles.loginView}>
+          <TextInput
+            style={styles.loginInput}
+            placeholder="Användarnamn"
+            keyboardType="email-address"
+            value={userName}
+            onChangeText={setUserName}
+          />
 
+          <TextInput
+            style={styles.loginInput}
+            placeholder="Lösenord"
+            keyboardType="default"
+            secureTextEntry={true}
+            value={password}
+            onChangeText={setPassword}
+          />
 
-      <Pressable style={styles.registerNavButton} onPress={() => toggleRegistration()}>
-        <Text>Registrera ny användare</Text>
-      </Pressable>
+          <Pressable style={styles.loginButton} onPress={() => loginUser(userName, password)}>
+            <Text>Logga in</Text>
+          </Pressable>
+        </View>
+
+        <Pressable style={styles.registerNavButton} onPress={() => toggleRegistration()}>
+          <Text style={styles.registerText}>Registrera ny användare</Text>
+        </Pressable>
+      </View>
     </View>
   )
 }
@@ -87,16 +98,40 @@ export default LoginView;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+  },
+  background: {
+    height: screenHeight,
+    width: screenWidth,
+    position: 'absolute',
+    zIndex: 1,
+  },
+  logoContainer: {
+    position: 'absolute',
+    top: 150,
+    left: 0,
+    right: 0,
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    zIndex: 10,
+    backgroundColor: 'rgba(175, 175, 0, 0.3)',
+    width: 220,
+    padding: 50,
+    borderRadius: 120
+  },
+  contentContainer: {
+    height: screenHeight,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'flex-end',
+    zIndex: 10
   },
   loginView: {
     width: '90%',
     alignItems: 'center',
     paddingTop: 50,
     paddingBottom: 50,
-    backgroundColor: 'white'
-
+    borderRadius: 10,
+    marginBottom: 250,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)'
   },
   loginInput: {
     height: 31,
@@ -118,6 +153,10 @@ const styles = StyleSheet.create({
   },
   registerNavButton: {
     position: 'absolute',
-    bottom: 35
+    padding: 10,
+    bottom: 25
+  },
+  registerText: {
+    color: 'white'
   }
 })
