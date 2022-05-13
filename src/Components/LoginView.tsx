@@ -24,9 +24,9 @@ const LoginView: React.FC<ILoginView> = (props) => {
     }
   }
 
-  const loginUser = (userName: string, password: string) => {
-    if (userName && password != '') {
-      signInWithEmailAndPassword(auth, userName, password)
+  const loginUser = (email: string, password: string) => {
+    if (email && password != '') {
+      signInWithEmailAndPassword(auth, email, password)
         .then((userCredentials) => {
           console.log('Signed in: ', userCredentials.user);
           storeUser(userCredentials.user);
@@ -75,7 +75,7 @@ const LoginView: React.FC<ILoginView> = (props) => {
 
 
 
-      <Pressable style={styles.registerButton} onPress={() => toggleRegistration()}>
+      <Pressable style={styles.registerNavButton} onPress={() => toggleRegistration()}>
         <Text>Registrera ny användare</Text>
       </Pressable>
     </View>
@@ -110,7 +110,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     backgroundColor: 'lightgray'
   },
-  registerButton: {
+  registerNavButton: {
     position: 'absolute',
     bottom: 35
   }
