@@ -6,7 +6,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { LandingScreens } from "../helpers/types";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-interface ILoginView extends NativeStackScreenProps<LandingScreens, "LoginView"> { }
+interface ILoginView extends NativeStackScreenProps<LandingScreens, "LoginScreen"> { }
 
 const LoginView: React.FC<ILoginView> = (props) => {
   const [userName, setUserName] = useState<string>('');
@@ -43,7 +43,7 @@ const LoginView: React.FC<ILoginView> = (props) => {
   }
 
   const toggleRegistration = () => {
-    props.navigation.replace("RegistrationView");
+    props.navigation.replace("RegistrationScreen");
   }
 
   return (

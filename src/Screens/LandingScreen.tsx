@@ -37,15 +37,15 @@ const LandingScreen: React.FC<ILandingScreen> = (props) => {
   }, []);
 
   return (
-    <Stack.Navigator initialRouteName='LoginView'>
+    <Stack.Navigator initialRouteName='LoginScreen'>
       <Stack.Screen
-        name="LoginView"
+        name="LoginScreen"
         component={LoginView}
         options={{ headerShown: false }}
       />
 
       <Stack.Screen
-        name="RegistrationView"
+        name="RegistrationScreen"
         component={RegistrationView}
         options={{ headerShown: false }}
       />
