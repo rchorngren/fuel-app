@@ -1,7 +1,7 @@
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
 import React, { useContext, useEffect } from "react";
-import LoginView from '../Components/LoginView';
-import RegistrationView from '../Components/RegistrationView';
+import LoginView from './LoginScreen';
+import RegistrationView from './RegistrationScreen';
 import { Context } from '../context/Context';
 import { LandingScreens, StackScreen } from '../helpers/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
