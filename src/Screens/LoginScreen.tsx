@@ -23,7 +23,7 @@ const LoginView: React.FC<ILoginView> = (props) => {
 
   const auth = getAuth();
 
-  const storeUser = async (user: any) => {
+  const storeUser = async (user: string) => {
     try {
       await AsyncStorage.setItem('@authed_User', user);
     } catch (error) {
@@ -36,7 +36,8 @@ const LoginView: React.FC<ILoginView> = (props) => {
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredentials) => {
           console.log('Signed in: ', userCredentials.user);
-          storeUser(userCredentials.user);
+          const userStrigify = JSON.stringify(userCredentials.user);
+          storeUser(userStrigify);
           context?.setAuthed(true);
         })
         .catch((error) => {
@@ -58,7 +59,9 @@ const LoginView: React.FC<ILoginView> = (props) => {
       <Image style={styles.background} source={backgroundImg} />
 
       <View style={styles.logoContainer}>
-        <FuelPump />
+        <View style={styles.logo}>
+          <FuelPump />
+        </View>
       </View>
 
       <View style={styles.contentContainer}>
@@ -107,12 +110,13 @@ const styles = StyleSheet.create({
   },
   logoContainer: {
     position: 'absolute',
+    alignItems: 'center',
+    justifyContent: 'center',
     top: 150,
-    left: 0,
-    right: 0,
-    marginLeft: 'auto',
-    marginRight: 'auto',
+    width: '100%',
     zIndex: 10,
+  },
+  logo: {
     backgroundColor: 'rgba(175, 175, 0, 0.3)',
     width: 220,
     padding: 50,
