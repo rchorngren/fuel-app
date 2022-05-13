@@ -16,7 +16,7 @@ const RegistrationView: React.FC<IRegistrationView> = (props) => {
 
   const auth = getAuth();
 
-  const storeUser = async (user: any) => {
+  const storeUser = async (user: string) => {
     try {
       await AsyncStorage.setItem('@authed_User', user);
     } catch (error) {
@@ -30,7 +30,8 @@ const RegistrationView: React.FC<IRegistrationView> = (props) => {
         signInWithEmailAndPassword(auth, email, password)
           .then((userCredentials) => {
             console.log('Signed in: ', userCredentials.user);
-            storeUser(userCredentials.user);
+            const userStrigify = JSON.stringify(userCredentials.user);
+            storeUser(userStrigify);
             context?.setAuthed(true);
           })
           .catch((error) => {
