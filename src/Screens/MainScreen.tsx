@@ -5,6 +5,7 @@ import { AuthedScreens, StackScreen } from "../helpers/types";
 import HomeScreen from "./HomeScreen";
 import SettingsScreen from "./SettingsScreen";
 import { Context } from "../context/Context";
+import LogScreen from "./LogScreen";
 
 interface IMainScreen extends NativeStackScreenProps<StackScreen, "MainScreen"> { }
 
@@ -20,16 +21,16 @@ const MainScreen: React.FC<IMainScreen> = (props) => {
 
   return (
     <TabsNavigation.Navigator
-      initialRouteName='HomeScreen'
+      initialRouteName='SettingsScreen'
       tabBarPosition='bottom'>
       <TabsNavigation.Screen
         name='LogScreen'
-        component={HomeScreen}
+        component={LogScreen}
         options={{
           // tabBarIcon: () => { return (<HomeSvg />)},
           // tabBarActiveTintColor: 'hotpink'
           // tabBarInactiveTintColor: 'gray'
-          tabBarLabel: "Loggar",
+          tabBarLabel: 'Loggar',
           // tabBarLabelStyle: styles.tabBarLabel,
         }} />
       <TabsNavigation.Screen

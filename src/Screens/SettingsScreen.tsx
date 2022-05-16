@@ -1,28 +1,36 @@
 import React, { useContext } from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, StyleSheet } from "react-native";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Context } from "../context/Context";
+import { createNativeStackNavigator, NativeStackScreenProps } from "@react-navigation/native-stack";
+import { AuthedScreens, SettingsScreens } from "../helpers/types";
+import SettingsOverviewScreen from "./SettingsOverviewScreen";
+import CreateScreen from "./CreateScreen";
+import RemoveScreen from "./RemoveScreen";
 
-const SettingsScreen = () => {
+interface ISettingsScreen extends NativeStackScreenProps<AuthedScreens, 'SettingsScreen'> { }
 
-  const context = useContext(Context);
+const Stack = createNativeStackNavigator<SettingsScreens>();
 
-  const logout = async () => {
-    try {
-      await AsyncStorage.removeItem('@authed_User');
-    } catch (error) {
-      console.log('There was an error remove stored user');
-    }
-    context?.setAuthed(false);
-  }
+const SettingsScreen: React.FC<ISettingsScreen> = (props) => {
 
   return (
-    <View>
-      <Text>Hello from SettingsScreen!</Text>
-      <Pressable onPress={() => logout()}>
-        <Text>Logout</Text>
-      </Pressable>
-    </View>
+    <Stack.Navigator initialRouteName="CreateScreen">
+      <Stack.Screen
+        name="SettingsOverviewScreen"
+        component={SettingsOverviewScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="CreateScreen"
+        component={CreateScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="RemoveScreen"
+        component={RemoveScreen}
+        options={{ headerShown: false }}
+      />
+    </Stack.Navigator>
   )
 }
 

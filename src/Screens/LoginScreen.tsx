@@ -13,7 +13,7 @@ import FuelPump from "../../assets/svg/FuelPump";
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
 
-interface ILoginView extends NativeStackScreenProps<LandingScreens, "LoginScreen"> { }
+interface ILoginView extends NativeStackScreenProps<LandingScreens, 'LoginScreen'> { }
 
 const LoginView: React.FC<ILoginView> = (props) => {
   const [userName, setUserName] = useState<string>('');
@@ -41,7 +41,7 @@ const LoginView: React.FC<ILoginView> = (props) => {
           context?.setAuthed(true);
         })
         .catch((error) => {
-          console.log('There was an error while signing in: ', error)
+          console.log('There was an error while signing in: ', error);
         })
     }
     else {
