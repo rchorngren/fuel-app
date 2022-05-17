@@ -6,7 +6,7 @@ import HeaderComponent from "../Components/HeaderComponent";
 import { SettingsScreens } from "../helpers/types";
 
 //@ts-ignore
-import { getFirestore, setDoc, doc } from 'firebase/firestore';
+import { getFirestore, setDoc, doc, addDoc, collection } from 'firebase/firestore';
 import { Context } from "../context/Context";
 
 interface ICreateScreen extends NativeStackScreenProps<SettingsScreens, 'CreateScreen'> { }
@@ -18,7 +18,6 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
   const [tankSize, setTankSize] = useState<string>('0');
   const [tankName, setTankName] = useState<string>('');
   const [vesselName, setVesselName] = useState<string>('');
-  const [uid, setUid] = useState<string>('');
 
   const firestore = getFirestore();
   const context = useContext(Context);
@@ -28,19 +27,23 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
   }
 
   const saveToFirebase = async () => {
+    const uid = context?.authedUserUid
     if (selectTypeToAdd === 'tank') {
-      // const document = context?.authedUserUid + '-' + tankName
-      await setDoc(doc(firestore, context?.authedUserUid, selectTypeToAdd, typeOfFuel, tankName), {
-        // owner: context?.authedUserUid,
+      // await setDoc(doc(firestore, uid, selectTypeToAdd, typeOfFuel, tankName), {
+      //   type: selectTypeToAdd,
+      //   fuel: typeOfFuel,
+      //   size: tankSize,
+      //   name: tankName
+      // });
+      await addDoc(collection(firestore, uid, selectTypeToAdd, typeOfFuel), {
         type: selectTypeToAdd,
         fuel: typeOfFuel,
         size: tankSize,
         name: tankName
-      });
+      })
     }
     else if (selectTypeToAdd === 'vessel') {
-      await setDoc(doc(firestore, selectTypeToAdd, vesselName), {
-        ownder: 'uidgoeshere',
+      await addDoc(collection(firestore, uid, selectTypeToAdd, vesselName), {
         type: selectTypeToAdd,
         name: vesselName
       })
