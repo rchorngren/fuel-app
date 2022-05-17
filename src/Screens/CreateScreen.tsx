@@ -38,8 +38,9 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
       await addDoc(collection(firestore, uid, selectTypeToAdd, typeOfFuel), {
         type: selectTypeToAdd,
         fuel: typeOfFuel,
-        size: tankSize,
-        name: tankName
+        size: parseInt(tankSize),
+        name: tankName,
+        fuelLevel: 0
       })
     }
     else if (selectTypeToAdd === 'vessel') {
@@ -110,7 +111,25 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
             </Pressable>
           </View>
         ) : (
-          null
+          <View>
+
+
+            <View style={styles.pickerView}>
+              <Text>Fartygets namn</Text>
+              <TextInput
+                style={styles.textInput}
+                keyboardType='default'
+                value={vesselName}
+                onChangeText={setVesselName}
+              />
+            </View>
+
+
+
+            <Pressable style={styles.saveButton} onPress={() => saveToFirebase()}>
+              <Text>Spara</Text>
+            </Pressable>
+          </View>
         )}
 
       </View>
