@@ -13,7 +13,6 @@ firebase.initializeApp(firebaseConfig);
 const Stack = createNativeStackNavigator<StackScreen>();
 
 export default function App() {
-
   return (
     <NavigationContainer>
       <ContextProvider>

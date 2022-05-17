@@ -14,7 +14,7 @@ const Stack = createNativeStackNavigator<SettingsScreens>();
 const SettingsScreen: React.FC<ISettingsScreen> = (props) => {
 
   return (
-    <Stack.Navigator initialRouteName="CreateScreen">
+    <Stack.Navigator initialRouteName="SettingsOverviewScreen">
       <Stack.Screen
         name="SettingsOverviewScreen"
         component={SettingsOverviewScreen}

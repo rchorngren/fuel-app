@@ -27,7 +27,7 @@ const LoginView: React.FC<ILoginView> = (props) => {
     try {
       await AsyncStorage.setItem('@authed_User', user);
     } catch (error) {
-      console.log('There was an error while saving the user');
+      console.log('There was an error while saving the user: ', error);
     }
   }
 

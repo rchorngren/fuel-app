@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "fuel-app",
-    "slug": "fuel-app",
+    "name": "Fuel Manager",
+    "slug": "fuel-manager-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -22,9 +22,11 @@
     },
     "android": {
       "adaptiveIcon": {
+        "package": "net.horngren.fuelmanager",
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.rchorngren.fuelmanagerapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"

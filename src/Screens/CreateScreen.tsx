@@ -1,9 +1,13 @@
 import { Picker } from "@react-native-picker/picker";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
 import HeaderComponent from "../Components/HeaderComponent";
 import { SettingsScreens } from "../helpers/types";
+
+//@ts-ignore
+import { getFirestore, setDoc, doc } from 'firebase/firestore';
+import { Context } from "../context/Context";
 
 interface ICreateScreen extends NativeStackScreenProps<SettingsScreens, 'CreateScreen'> { }
 
@@ -13,17 +17,35 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
   const [typeOfFuel, setTypeOfFuel] = useState<string>('diesel');
   const [tankSize, setTankSize] = useState<string>('0');
   const [tankName, setTankName] = useState<string>('');
+  const [vesselName, setVesselName] = useState<string>('');
+  const [uid, setUid] = useState<string>('');
+
+  const firestore = getFirestore();
+  const context = useContext(Context);
 
   const navigateBack = () => {
     props.navigation.goBack();
   }
 
-  const saveToFirebase = () => {
-    console.log('saving: ');
-    console.log(selectTypeToAdd);
-    console.log(typeOfFuel);
-    console.log(tankSize);
-    console.log(tankName);
+  const saveToFirebase = async () => {
+    if (selectTypeToAdd === 'tank') {
+      // const document = context?.authedUserUid + '-' + tankName
+      await setDoc(doc(firestore, context?.authedUserUid, selectTypeToAdd, typeOfFuel, tankName), {
+        // owner: context?.authedUserUid,
+        type: selectTypeToAdd,
+        fuel: typeOfFuel,
+        size: tankSize,
+        name: tankName
+      });
+    }
+    else if (selectTypeToAdd === 'vessel') {
+      await setDoc(doc(firestore, selectTypeToAdd, vesselName), {
+        ownder: 'uidgoeshere',
+        type: selectTypeToAdd,
+        name: vesselName
+      })
+    }
+
   }
 
   return (
