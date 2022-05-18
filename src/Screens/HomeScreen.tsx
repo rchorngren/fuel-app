@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { View, Text, Pressable, StyleSheet, ScrollView } from "react-native";
 import { Context } from "../context/Context";
 //@ts-ignore
-import { getFirestore, getDocs, collection } from "firebase/firestore";
+import { getFirestore, getDocs, collection, updateDoc, doc } from "firebase/firestore";
 import { useIsFocused } from "@react-navigation/native";
 
 
@@ -11,11 +11,22 @@ import { useIsFocused } from "@react-navigation/native";
 const HomeScreen = () => {
   const [content, setContent] = useState(<View />)
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  // const [tanks, setTanks] = useState<any>([]);
 
   const context = useContext(Context);
   const isFocused = useIsFocused();
   const firestore = getFirestore();
+
+  const restock = async (item: any) => {
+    const uid = context?.authedUserUid;
+    const newFuelLevel = item.fuelLevel + 200;
+    const docRef = doc(firestore, uid, item.type, item.fuel, item.id)
+
+    await updateDoc(docRef, {
+      fuelLevel: newFuelLevel
+    })
+
+
+  }
 
   const buildContent = () => {
     const data = context?.availableTanks;
@@ -29,7 +40,7 @@ const HomeScreen = () => {
             <Text style={styles.tankText}>Nivå: {item.fuelLevel} / {item.size}</Text>
             <View style={styles.buttonView}>
               <Pressable style={[styles.bunkerButton, styles.fuelButton]}><Text>+</Text></Pressable>
-              <Pressable style={[styles.bunkerButton, styles.refillButton]}><Text>Fyll på</Text></Pressable>
+              <Pressable style={[styles.bunkerButton, styles.refillButton]} onPress={() => restock(item)}><Text>Fyll på</Text></Pressable>
             </View>
           </View>
         )
@@ -56,7 +67,7 @@ const HomeScreen = () => {
       let data = doc.data();
 
       //@ts-ignore
-      if (!context?.availableTanks.some(currentTanks => currentTanks.name === data.name)) {
+      if (!context?.availableTanks.some(currentTanks => currentTanks.id === data.id)) {
         //@ts-ignore
         context?.setAvailableTanks(petrolTanks => [...petrolTanks, data]);
       }
@@ -67,7 +78,7 @@ const HomeScreen = () => {
       let data = doc.data();
 
       //@ts-ignore
-      if (!context?.availableTanks.some(currentTanks => currentTanks.name === data.name)) {
+      if (!context?.availableTanks.some(currentTanks => currentTanks.id === data.id)) {
         //@ts-ignore
         context?.setAvailableTanks(petrolTanks => [...petrolTanks, data]);
       }

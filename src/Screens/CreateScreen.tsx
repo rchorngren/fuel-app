@@ -6,7 +6,7 @@ import HeaderComponent from "../Components/HeaderComponent";
 import { SettingsScreens } from "../helpers/types";
 
 //@ts-ignore
-import { getFirestore, addDoc, collection } from 'firebase/firestore';
+import { getFirestore, addDoc, collection, updateDoc } from 'firebase/firestore';
 import { Context } from "../context/Context";
 
 interface ICreateScreen extends NativeStackScreenProps<SettingsScreens, 'CreateScreen'> { }
@@ -28,12 +28,19 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
   const saveToFirebase = async () => {
     const uid = context?.authedUserUid
     if (selectTypeToAdd === 'tank') {
-      await addDoc(collection(firestore, uid, selectTypeToAdd, typeOfFuel), {
+      const docRef = await addDoc(collection(firestore, uid, selectTypeToAdd, typeOfFuel), {
         type: selectTypeToAdd,
         fuel: typeOfFuel,
         size: parseInt(tankSize),
         name: tankName,
-        fuelLevel: 0
+        fuelLevel: 0,
+        id: ''
+      });
+
+      console.log('docRef: ', docRef)
+
+      await updateDoc(docRef, {
+        id: docRef.id
       })
     }
     else if (selectTypeToAdd === 'vessel') {
