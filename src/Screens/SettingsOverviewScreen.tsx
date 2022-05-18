@@ -12,11 +12,14 @@ const SettingsOverviewScreen: React.FC<ISettingsOverviewScreen> = (props) => {
   const context = useContext(Context);
 
   const logout = async () => {
+    console.log('logging out...')
     try {
       await AsyncStorage.removeItem('@authed_User');
     } catch (error) {
       console.log('There was an error remove stored user');
     }
+    context?.setAuthedUserUid('');
+    context?.setAvailableTanks([]);
     context?.setAuthed(false);
   }
 

@@ -9,16 +9,14 @@ import { getFirestore, getDocs, collection } from "firebase/firestore";
 
 const HomeScreen = () => {
   const [content, setContent] = useState(<View />)
-  const [dieselTanks, setDieselTanks] = useState<any>([]);
-  const [petrolTanks, setPetrolTanks] = useState<any>([]);
-  const [itemToAdd, setItemToAdd] = useState<any>();
+  // const [tanks, setTanks] = useState<any>([]);
 
   const context = useContext(Context);
 
   const firestore = getFirestore();
 
   const buildContent = () => {
-    const data = petrolTanks;
+    const data = context?.availableTanks;
 
     if (data) {
       setContent(data.map((item: any, index: number) => {
@@ -56,9 +54,9 @@ const HomeScreen = () => {
       let data = doc.data();
 
       //@ts-ignore
-      if (!petrolTanks.some(currentTanks => currentTanks.name === data.name)) {
+      if (!context?.availableTanks.some(currentTanks => currentTanks.name === data.name)) {
         //@ts-ignore
-        setPetrolTanks(petrolTanks => [...petrolTanks, data]);
+        context?.setAvailableTanks(petrolTanks => [...petrolTanks, data]);
       }
 
     });
@@ -67,19 +65,19 @@ const HomeScreen = () => {
       let data = doc.data();
 
       //@ts-ignore
-      if (!petrolTanks.some(currentTanks => currentTanks.name === data.name)) {
+      if (!context?.availableTanks.some(currentTanks => currentTanks.name === data.name)) {
         //@ts-ignore
-        setPetrolTanks(petrolTanks => [...petrolTanks, data]);
+        context?.setAvailableTanks(petrolTanks => [...petrolTanks, data]);
       }
 
     });
   }
 
   useEffect(() => {
-    if (petrolTanks !== []) {
+    if (context?.availableTanks !== []) {
       buildContent();
     }
-  }, [petrolTanks]);
+  }, [context?.availableTanks]);
 
   useEffect(() => {
     if (context?.authedUserUid !== '') {
