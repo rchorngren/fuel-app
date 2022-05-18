@@ -22,11 +22,9 @@
     },
     "android": {
       "adaptiveIcon": {
-        "package": "net.horngren.fuelmanager",
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      },
-      "package": "com.rchorngren.fuelmanagerapp"
+      }
     },
     "web": {
       "favicon": "./assets/favicon.png"
