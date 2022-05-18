@@ -35,7 +35,7 @@ const LoginView: React.FC<ILoginView> = (props) => {
     if (email && password != '') {
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredentials) => {
-          console.log('Signed in: ', userCredentials.user);
+          // console.log('Signed in: ', userCredentials.user);
           const userStrigify = JSON.stringify(userCredentials.user);
           storeUser(userStrigify);
           context?.setAuthed(true);

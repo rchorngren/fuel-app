@@ -1,19 +1,18 @@
 import { Picker } from "@react-native-picker/picker";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
 import HeaderComponent from "../Components/HeaderComponent";
 import { SettingsScreens } from "../helpers/types";
 
 //@ts-ignore
-import { getFirestore, setDoc, doc, addDoc, collection } from 'firebase/firestore';
+import { getFirestore, addDoc, collection } from 'firebase/firestore';
 import { Context } from "../context/Context";
 
 interface ICreateScreen extends NativeStackScreenProps<SettingsScreens, 'CreateScreen'> { }
 
 const CreateScreen: React.FC<ICreateScreen> = (props) => {
   const [selectTypeToAdd, setSelectedTypeToAdd] = useState<string>('tank');
-  // const [selectDetailToAdd, setSelectDetailsToAdd] = useState(<View />);
   const [typeOfFuel, setTypeOfFuel] = useState<string>('diesel');
   const [tankSize, setTankSize] = useState<string>('0');
   const [tankName, setTankName] = useState<string>('');
@@ -29,12 +28,6 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
   const saveToFirebase = async () => {
     const uid = context?.authedUserUid
     if (selectTypeToAdd === 'tank') {
-      // await setDoc(doc(firestore, uid, selectTypeToAdd, typeOfFuel, tankName), {
-      //   type: selectTypeToAdd,
-      //   fuel: typeOfFuel,
-      //   size: tankSize,
-      //   name: tankName
-      // });
       await addDoc(collection(firestore, uid, selectTypeToAdd, typeOfFuel), {
         type: selectTypeToAdd,
         fuel: typeOfFuel,
@@ -112,8 +105,6 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
           </View>
         ) : (
           <View>
-
-
             <View style={styles.pickerView}>
               <Text>Fartygets namn</Text>
               <TextInput
@@ -123,8 +114,6 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
                 onChangeText={setVesselName}
               />
             </View>
-
-
 
             <Pressable style={styles.saveButton} onPress={() => saveToFirebase()}>
               <Text>Spara</Text>
