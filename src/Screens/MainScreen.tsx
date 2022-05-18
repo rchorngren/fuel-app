@@ -21,7 +21,7 @@ const MainScreen: React.FC<IMainScreen> = (props) => {
 
   return (
     <TabsNavigation.Navigator
-      initialRouteName='SettingsScreen'
+      initialRouteName='HomeScreen'
       tabBarPosition='bottom'>
       <TabsNavigation.Screen
         name='LogScreen'
