@@ -49,9 +49,10 @@ const HomeScreen = () => {
 
   const loadContent = async () => {
     const uid = context?.authedUserUid;
-    const querySnapshot = await getDocs(collection(firestore, uid, 'tank', 'bensin'));
+    const petrolSnapshot = await getDocs(collection(firestore, uid, 'tank', 'bensin'));
+    const dieselSnapshot = await getDocs(collection(firestore, uid, 'tank', 'diesel'));
 
-    querySnapshot.forEach((doc: any) => {
+    dieselSnapshot.forEach((doc: any) => {
       let data = doc.data();
 
       //@ts-ignore
@@ -60,7 +61,18 @@ const HomeScreen = () => {
         setPetrolTanks(petrolTanks => [...petrolTanks, data]);
       }
 
-    })
+    });
+
+    petrolSnapshot.forEach((doc: any) => {
+      let data = doc.data();
+
+      //@ts-ignore
+      if (!petrolTanks.some(currentTanks => currentTanks.name === data.name)) {
+        //@ts-ignore
+        setPetrolTanks(petrolTanks => [...petrolTanks, data]);
+      }
+
+    });
   }
 
   useEffect(() => {
