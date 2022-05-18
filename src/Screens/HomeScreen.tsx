@@ -4,15 +4,17 @@ import { View, Text, Pressable, StyleSheet, ScrollView } from "react-native";
 import { Context } from "../context/Context";
 //@ts-ignore
 import { getFirestore, getDocs, collection } from "firebase/firestore";
+import { useIsFocused } from "@react-navigation/native";
 
 
 
 const HomeScreen = () => {
   const [content, setContent] = useState(<View />)
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   // const [tanks, setTanks] = useState<any>([]);
 
   const context = useContext(Context);
-
+  const isFocused = useIsFocused();
   const firestore = getFirestore();
 
   const buildContent = () => {
@@ -74,6 +76,13 @@ const HomeScreen = () => {
   }
 
   useEffect(() => {
+    if (!isLoading) {
+      loadContent();
+    }
+
+  }, [isFocused]);
+
+  useEffect(() => {
     if (context?.availableTanks !== []) {
       buildContent();
     }
@@ -81,6 +90,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     if (context?.authedUserUid !== '') {
+      setIsLoading(false);
       loadContent();
     }
   }, [context?.authedUserUid]);
