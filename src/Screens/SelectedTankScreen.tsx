@@ -98,7 +98,6 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
                 value={refuelAmount}
                 onChangeText={setRefuelAmount}
               />
-              <Text style={styles.text}>Ange fartyg:</Text>
 
               <View style={styles.buttonView}>
                 <Pressable style={styles.actionButton} onPress={() => saveAndNavBack()}>

@@ -81,6 +81,7 @@ const HomeOverviewScreen: React.FC<IHomeOverviewScreen> = (props) => {
 
   useEffect(() => {
     if (!isLoading) {
+      loadContent();
       buildContent();
     }
   }, [isFocused]);
