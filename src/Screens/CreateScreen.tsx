@@ -37,16 +37,19 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
         id: ''
       });
 
-      console.log('docRef: ', docRef)
-
       await updateDoc(docRef, {
         id: docRef.id
       })
     }
     else if (selectTypeToAdd === 'vessel') {
-      await addDoc(collection(firestore, uid, selectTypeToAdd, vesselName), {
+      const docRef = await addDoc(collection(firestore, uid, selectTypeToAdd, 'ship'), {
         type: selectTypeToAdd,
-        name: vesselName
+        name: vesselName,
+        id: ''
+      });
+
+      await updateDoc(docRef, {
+        id: docRef.id
       })
     }
 

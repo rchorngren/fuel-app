@@ -7,6 +7,7 @@ import { HomeScreens } from "../helpers/types";
 
 //@ts-ignore
 import { getFirestore, getDocs, collection, updateDoc, doc } from "firebase/firestore";
+import { Picker } from "@react-native-picker/picker";
 
 interface ISelectedTankScreen extends NativeStackScreenProps<HomeScreens, 'SelectedTankScreen'> { }
 
@@ -15,6 +16,10 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
   const [refuelVesselView, setRefuelVesselView] = useState<boolean>(false);
   const [refuelAmount, setRefuelAmount] = useState<string>('0');
   const [fuelingAmount, setFuelingAmount] = useState<string>('0');
+
+  const [selectedVessel, setSelectedVessel] = useState<string>('');
+  const [availableVessels, setAvailableVessels] = useState<any>([]);
+  const [vesselItems, setVesselItems] = useState<any>(<Picker.Item label="loading..." value="" />)
 
   const context = useContext(Context);
   const firestore = getFirestore();
@@ -98,6 +103,43 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
     setRefuelAmount('0');
   }
 
+  const vesselPicker = () => {
+    const data = availableVessels;
+
+    if (data) {
+      setVesselItems(data.map((item: any, index: number) => {
+        return (
+          <Picker.Item label={item.name} value={item.name} key={index} />
+        )
+      }))
+    }
+  }
+
+  const loadVessels = async () => {
+    const uid = context?.authedUserUid;
+    const vesselsSnapshot = await getDocs(collection(firestore, uid, 'vessel', 'ship'));
+    vesselsSnapshot.forEach((doc: any) => {
+      let data = doc.data();
+      //@ts-ignore
+      if (!availableVessels.some(currentVessel => currentVessel.id === data.id)) {
+        //@ts-ignore
+        setAvailableVessels(mcBoatFace => [...mcBoatFace, data]);
+      }
+    })
+
+    // setTimeout(() => {
+    //   vesselPicker();
+    // }, 1000)
+  }
+
+  useEffect(() => {
+    vesselPicker();
+  }, [availableVessels]);
+
+  useEffect(() => {
+    loadVessels();
+  }, []);
+
   return (
     <View style={styles.container}>
       <HeaderComponent functionToTrigger={navBack} headerTitle={tank.name} />
@@ -120,7 +162,15 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
               />
 
               <Text style={styles.text}>Fartyg som tankas:</Text>
-              {/* picker goes here */}
+              <Picker
+                // style={}
+                selectedValue={selectedVessel}
+                onValueChange={(itemValue, itemIndex) =>
+                  setSelectedVessel(itemValue)
+                }>
+                {vesselItems}
+              </Picker>
+
 
               <View style={styles.buttonView}>
                 <Pressable style={styles.actionButton} onPress={() => saveFuelingAndNavBack()}>
