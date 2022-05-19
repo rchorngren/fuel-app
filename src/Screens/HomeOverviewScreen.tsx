@@ -18,13 +18,9 @@ const HomeOverviewScreen: React.FC<IHomeOverviewScreen> = (props) => {
   const isFocused = useIsFocused();
   const firestore = getFirestore();
 
-  const tanks = context?.availableTanks;
-
   const navigateToTank = (tankInfo: any) => {
     context?.setAvailableTanks([]);
     context?.setSelectedTank(tankInfo);
-
-
 
     props.navigation.navigate('SelectedTankScreen');
   }
@@ -81,13 +77,20 @@ const HomeOverviewScreen: React.FC<IHomeOverviewScreen> = (props) => {
 
   useEffect(() => {
     if (!isLoading) {
-      loadContent();
-      buildContent();
+      if (isFocused) {
+        if (context?.availableTanks !== []) {
+          buildContent();
+          loadContent();
+        }
+      }
     }
   }, [isFocused]);
 
   useEffect(() => {
-    buildContent();
+
+    if (context?.availableTanks) {
+      buildContent();
+    }
   }, [context?.availableTanks]);
 
   useEffect(() => {
