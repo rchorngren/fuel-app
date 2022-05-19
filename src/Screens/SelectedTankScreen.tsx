@@ -7,8 +7,6 @@ import { HomeScreens } from "../helpers/types";
 
 //@ts-ignore
 import { getFirestore, getDocs, collection, updateDoc, doc } from "firebase/firestore";
-import { async } from "@firebase/util";
-
 
 interface ISelectedTankScreen extends NativeStackScreenProps<HomeScreens, 'SelectedTankScreen'> { }
 
@@ -16,6 +14,7 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [refuelVesselView, setRefuelVesselView] = useState<boolean>(false);
   const [refuelAmount, setRefuelAmount] = useState<string>('0');
+  const [fuelingAmount, setFuelingAmount] = useState<string>('0');
 
   const context = useContext(Context);
   const firestore = getFirestore();
@@ -24,6 +23,11 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
 
   const navBack = () => {
     props.navigation.goBack();
+  }
+
+  const bunkerVessel = () => {
+    setRefuelVesselView(true);
+    setShowModal(true);
   }
 
   const bunkerTank = () => {
@@ -62,9 +66,25 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
     props.navigation.goBack();
   }
 
-  const saveAndNavBack = async () => {
+  const saveBunkerAndNavBack = async () => {
     const uid = context?.authedUserUid;
     const newFuelLevel = tank.fuelLevel + parseInt(refuelAmount);
+    const docRef = doc(firestore, uid, tank.type, tank.fuel, tank.id);
+
+    await updateDoc(docRef, {
+      fuelLevel: newFuelLevel
+    });
+
+    updateLocalTanks();
+
+    setShowModal(false);
+    setRefuelVesselView(false);
+    setRefuelAmount('0');
+  }
+
+  const saveFuelingAndNavBack = async () => {
+    const uid = context?.authedUserUid;
+    const newFuelLevel = tank.fuelLevel - parseInt(fuelingAmount);
     const docRef = doc(firestore, uid, tank.type, tank.fuel, tank.id);
 
     await updateDoc(docRef, {
@@ -84,7 +104,36 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
 
       {showModal ? (
         <View style={styles.modalView}>
-          {refuelVesselView ? (null) : (
+          {refuelVesselView ? (
+            <View style={styles.modalContent}>
+              <View style={styles.modalHeaderView}>
+                <Text style={styles.text}>Bunkra från {tank.name}</Text>
+              </View>
+
+              <Text style={styles.text}>Volym {tank.fuelLevel} / {tank.size}</Text>
+              <Text style={styles.text}>Bränslemängd:</Text>
+              <TextInput
+                style={styles.textInput}
+                keyboardType='number-pad'
+                value={fuelingAmount}
+                onChangeText={setFuelingAmount}
+              />
+
+              <Text style={styles.text}>Fartyg som tankas:</Text>
+              {/* picker goes here */}
+
+              <View style={styles.buttonView}>
+                <Pressable style={styles.actionButton} onPress={() => saveFuelingAndNavBack()}>
+                  <Text>Spara</Text>
+                </Pressable>
+
+                <Pressable style={styles.actionButton} onPress={() => cancelModal()}>
+                  <Text>Avbryt</Text>
+                </Pressable>
+              </View>
+
+            </View>
+          ) : (
             <View style={styles.modalContent}>
               <View style={styles.modalHeaderView}>
                 <Text style={styles.text}>Bunkra {tank.name}</Text>
@@ -100,7 +149,7 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
               />
 
               <View style={styles.buttonView}>
-                <Pressable style={styles.actionButton} onPress={() => saveAndNavBack()}>
+                <Pressable style={styles.actionButton} onPress={() => saveBunkerAndNavBack()}>
                   <Text>Spara</Text>
                 </Pressable>
 
@@ -125,7 +174,7 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
       </View>
 
       <View style={styles.buttonView}>
-        <Pressable style={styles.actionButton}>
+        <Pressable style={styles.actionButton} onPress={() => bunkerVessel()}>
           <Text style={styles.text}>Tanka fartyg</Text>
         </Pressable>
 
