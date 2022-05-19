@@ -18,7 +18,7 @@ export type HomeScreens = {
   HomeOverviewScreen: undefined,
   SelectedTankScreen: undefined //
   FuelScreen: undefined,
-  BunkerScreen: undefined
+  RefuelBunkerScreen: undefined
 }
 
 export type SettingsScreens = {
