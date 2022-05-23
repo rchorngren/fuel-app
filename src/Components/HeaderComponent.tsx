@@ -1,8 +1,6 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 import appColors from "../../assets/Styles/appColors";
-import { SettingsScreens } from "../helpers/types";
 
 const HeaderComponent = ({ functionToTrigger, headerTitle }: any) => {
 
@@ -11,7 +9,7 @@ const HeaderComponent = ({ functionToTrigger, headerTitle }: any) => {
     <View style={styles.container}>
 
       <Pressable style={styles.backNavButton} onPress={() => functionToTrigger()}>
-        <Text>!</Text>
+        <Text style={styles.goBackText}>Tillbaka</Text>
       </Pressable>
 
       <View>
@@ -41,6 +39,11 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 24,
     fontFamily: 'Roboto',
+    color: appColors.white
+  },
+  goBackText: {
+    fontFamily: 'Roboto',
+    fontSize: 15,
     color: appColors.white
   }
 });

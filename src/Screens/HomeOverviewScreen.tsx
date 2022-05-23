@@ -109,6 +109,7 @@ const HomeOverviewScreen: React.FC<IHomeOverviewScreen> = (props) => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.contentContainer}>
+        <Text style={styles.headlineText}>Välj bunker</Text>
         {content}
       </View>
     </ScrollView>
@@ -124,14 +125,14 @@ const styles = StyleSheet.create({
     backgroundColor: appColors.mediumBlue
   },
   contentContainer: {
-    marginTop: 75,
+    marginTop: 30,
     alignItems: 'center'
   },
   tankContainer: {
     width: '90%',
-    paddingTop: 25,
-    paddingBottom: 25,
-    paddingLeft: 25,
+    paddingTop: 30,
+    paddingBottom: 30,
+    paddingLeft: 33,
     paddingRight: 15,
     marginBottom: 20,
     borderWidth: 1,
@@ -156,11 +157,19 @@ const styles = StyleSheet.create({
   refillButton: {
     backgroundColor: 'yellow'
   },
+  headlineText: {
+    fontFamily: 'Roboto',
+    fontSize: 20,
+    color: appColors.yellow,
+    alignSelf: 'flex-start',
+    marginLeft: 25,
+    marginBottom: 12
+  },
   tankNameText: {
-    fontSize: 16,
+    fontSize: 17,
     fontFamily: 'Roboto',
     fontWeight: 'bold',
-    marginBottom: 10
+    marginBottom: 8
   },
   tankText: {
     fontSize: 16
