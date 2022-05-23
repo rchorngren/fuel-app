@@ -7,6 +7,7 @@ import { getFirestore, getDocs, collection } from "firebase/firestore";
 import { useIsFocused } from "@react-navigation/native";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import { HomeScreens } from "../helpers/types";
+import appColors from "../../assets/Styles/appColors";
 
 interface IHomeOverviewScreen extends NativeStackScreenProps<HomeScreens, 'HomeOverviewScreen'> { }
 
@@ -32,7 +33,7 @@ const HomeOverviewScreen: React.FC<IHomeOverviewScreen> = (props) => {
       setContent(data.map((item: any, index: number) => {
         return (
           <Pressable style={styles.tankContainer} onPress={() => navigateToTank(item)} key={index}>
-            <Text style={styles.tankText}>{item.name}</Text>
+            <Text style={styles.tankNameText}>{item.name}</Text>
             <Text style={styles.tankText}>Innehåll: {item.fuel}</Text>
             <Text style={styles.tankText}>Nivå: {item.fuelLevel} / {item.size}</Text>
           </Pressable>
@@ -118,21 +119,24 @@ export default HomeOverviewScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    marginTop: 30,
+    backgroundColor: appColors.mediumBlue
   },
   contentContainer: {
     marginTop: 75,
     alignItems: 'center'
   },
   tankContainer: {
-    width: '70%',
+    width: '90%',
     paddingTop: 25,
     paddingBottom: 25,
-    paddingLeft: 15,
+    paddingLeft: 25,
     paddingRight: 15,
     marginBottom: 20,
     borderWidth: 1,
-    borderRadius: 10
+    borderRadius: 10,
+    backgroundColor: appColors.mistBlue
   },
   buttonView: {
     flexDirection: 'row',
@@ -151,6 +155,12 @@ const styles = StyleSheet.create({
   },
   refillButton: {
     backgroundColor: 'yellow'
+  },
+  tankNameText: {
+    fontSize: 16,
+    fontFamily: 'Roboto',
+    fontWeight: 'bold',
+    marginBottom: 10
   },
   tankText: {
     fontSize: 16
