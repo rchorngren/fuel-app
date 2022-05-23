@@ -72,7 +72,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 20,
-    backgroundColor: appColors.mistBlue
+    backgroundColor: appColors.lightBlue
   },
   logoutButton: {
     backgroundColor: appColors.yellow,

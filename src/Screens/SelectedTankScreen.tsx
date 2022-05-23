@@ -8,6 +8,8 @@ import { HomeScreens } from "../helpers/types";
 //@ts-ignore
 import { getFirestore, getDocs, collection, updateDoc, doc } from "firebase/firestore";
 import { Picker } from "@react-native-picker/picker";
+import appColors from "../../assets/Styles/appColors";
+import { app } from "firebase-admin";
 
 interface ISelectedTankScreen extends NativeStackScreenProps<HomeScreens, 'SelectedTankScreen'> { }
 
@@ -145,11 +147,12 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
           {refuelVesselView ? (
             <View style={styles.modalContent}>
               <View style={styles.modalHeaderView}>
-                <Text style={styles.text}>Bunkra från {tank.name}</Text>
+                <Text style={[styles.text, styles.headLineText]}>Tanka från {tank.name}</Text>
+                <Text style={styles.text}>Volym {tank.fuelLevel} / {tank.size}</Text>
               </View>
 
-              <Text style={styles.text}>Volym {tank.fuelLevel} / {tank.size}</Text>
-              <Text style={styles.text}>Bränslemängd:</Text>
+
+              <Text style={[styles.text, styles.itemText]}>Bränslemängd:</Text>
               <TextInput
                 style={styles.textInput}
                 keyboardType='number-pad'
@@ -157,9 +160,9 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
                 onChangeText={setFuelingAmount}
               />
 
-              <Text style={styles.text}>Fartyg som tankas:</Text>
+              <Text style={[styles.text, styles.itemText]}>Fartyg som tankas:</Text>
               <Picker
-                // style={}
+                style={styles.vesselPicker}
                 selectedValue={selectedVessel}
                 onValueChange={(itemValue, itemIndex) =>
                   setSelectedVessel(itemValue)
@@ -170,11 +173,11 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
 
               <View style={styles.buttonView}>
                 <Pressable style={styles.actionButton} onPress={() => saveFuelingAndNavBack()}>
-                  <Text>Spara</Text>
+                  <Text style={[styles.text, styles.buttonText]}>Spara</Text>
                 </Pressable>
 
-                <Pressable style={styles.actionButton} onPress={() => cancelModal()}>
-                  <Text>Avbryt</Text>
+                <Pressable style={[styles.actionButton, styles.cancelButton]} onPress={() => cancelModal()}>
+                  <Text style={[styles.text, styles.buttonText]}>Avbryt</Text>
                 </Pressable>
               </View>
 
@@ -196,11 +199,11 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
 
               <View style={styles.buttonView}>
                 <Pressable style={styles.actionButton} onPress={() => saveBunkerAndNavBack()}>
-                  <Text>Spara</Text>
+                  <Text style={[styles.text, styles.buttonText]}>Spara</Text>
                 </Pressable>
 
-                <Pressable style={styles.actionButton} onPress={() => cancelModal()}>
-                  <Text>Avbryt</Text>
+                <Pressable style={[styles.actionButton, styles.cancelButton]} onPress={() => cancelModal()}>
+                  <Text style={[styles.text, styles.buttonText]}>Avbryt</Text>
                 </Pressable>
               </View>
 
@@ -213,19 +216,19 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
 
       <View style={styles.contentView}>
         <View style={styles.tankView}>
-          <Text style={styles.text}>{tank.name}</Text>
-          <Text style={styles.text}>Innehåll: {tank.fuel}</Text>
-          <Text style={styles.text}>Volym: {tank.fuelLevel} / {tank.size}</Text>
+          <Text style={[styles.text, styles.nameText]}>{tank.name}</Text>
+          <Text style={[styles.text, styles.detailsText]}>Innehåll: {tank.fuel}</Text>
+          <Text style={[styles.text, styles.detailsText]}>Volym: {tank.fuelLevel} / {tank.size}</Text>
         </View>
       </View>
 
       <View style={styles.buttonView}>
         <Pressable style={styles.actionButton} onPress={() => bunkerVessel()}>
-          <Text style={styles.text}>Tanka fartyg</Text>
+          <Text style={[styles.text, styles.buttonText]}>Tanka fartyg</Text>
         </Pressable>
 
         <Pressable style={styles.actionButton} onPress={() => bunkerTank()}>
-          <Text style={styles.text}>Fyll på bunker</Text>
+          <Text style={[styles.text, styles.buttonText]}>Fyll på bunker</Text>
         </Pressable>
       </View>
 
@@ -237,7 +240,9 @@ export default SelectedTankScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    marginTop: 30,
+    backgroundColor: appColors.mediumBlue
   },
   contentView: {
     justifyContent: 'center',
@@ -245,15 +250,15 @@ const styles = StyleSheet.create({
     zIndex: 10
   },
   tankView: {
-    width: '70%',
+    width: '90%',
     padding: 25,
     borderRadius: 15,
-    marginTop: 50,
-    backgroundColor: 'limegreen',
+    marginTop: 20,
+    backgroundColor: appColors.mistBlue,
   },
   buttonView: {
     alignItems: 'center',
-    marginTop: 50,
+    marginTop: 50
   },
   modalView: {
     position: 'absolute',
@@ -265,7 +270,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 2,
     borderRadius: 10,
-    backgroundColor: 'white',
+    backgroundColor: appColors.mistBlue,
     zIndex: 100
   },
   modalContent: {
@@ -273,12 +278,19 @@ const styles = StyleSheet.create({
   },
   modalHeaderView: {
     alignItems: 'center',
-    marginBottom: 15
+    marginBottom: 12
   },
   textInput: {
     padding: 10,
+    marginTop: 8,
+    marginBottom: 8,
     borderRadius: 5,
-    backgroundColor: 'limegreen'
+    backgroundColor: appColors.white
+  },
+  vesselPicker: {
+    marginTop: 8,
+    marginBottom: 8,
+    backgroundColor: appColors.white
   },
   actionButton: {
     width: '50%',
@@ -286,9 +298,30 @@ const styles = StyleSheet.create({
     padding: 15,
     marginBottom: 25,
     borderRadius: 10,
-    backgroundColor: 'limegreen'
+    backgroundColor: appColors.lightBlue
+  },
+  cancelButton: {
+    backgroundColor: appColors.yellow
   },
   text: {
+    fontFamily: 'Roboto',
+    fontSize: 15
+  },
+  headLineText: {
     fontSize: 24
+  },
+  itemText: {
+    fontSize: 18
+  },
+  nameText: {
+    fontSize: 24,
+    fontWeight: 'bold'
+  },
+  detailsText: {
+    fontSize: 20,
+    textTransform: 'capitalize'
+  },
+  buttonText: {
+    textTransform: 'uppercase',
   }
 })
