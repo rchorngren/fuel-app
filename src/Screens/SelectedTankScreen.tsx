@@ -126,10 +126,6 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
         setAvailableVessels(mcBoatFace => [...mcBoatFace, data]);
       }
     })
-
-    // setTimeout(() => {
-    //   vesselPicker();
-    // }, 1000)
   }
 
   useEffect(() => {
