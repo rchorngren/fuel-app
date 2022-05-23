@@ -1,15 +1,19 @@
 import { Picker } from "@react-native-picker/picker";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useContext, useState } from "react";
-import { View, Text, StyleSheet, TextInput, Pressable } from "react-native";
+import { View, Text, StyleSheet, TextInput, Pressable, ScrollView, Dimensions, KeyboardAvoidingView } from "react-native";
 import HeaderComponent from "../Components/HeaderComponent";
 import { SettingsScreens } from "../helpers/types";
 
 //@ts-ignore
 import { getFirestore, addDoc, collection, updateDoc } from 'firebase/firestore';
 import { Context } from "../context/Context";
+import appColors from "../../assets/Styles/appColors";
 
 interface ICreateScreen extends NativeStackScreenProps<SettingsScreens, 'CreateScreen'> { }
+
+// const screenWidth = Dimensions.get('screen').width;
+const screenHeigt = Dimensions.get('screen').height;
 
 const CreateScreen: React.FC<ICreateScreen> = (props) => {
   const [selectTypeToAdd, setSelectedTypeToAdd] = useState<string>('tank');
@@ -58,80 +62,87 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
   return (
     <View style={styles.container}>
       <HeaderComponent functionToTrigger={navigateBack} headerTitle={"Lägg till"} />
+      <ScrollView>
+        <View style={styles.contentContainer}>
 
-      <View style={styles.contentContainer}>
 
-        <View style={styles.pickerView}>
-          <Text>Vad vill du lägga till?</Text>
-          <Picker
-            style={styles.pickerInput}
-            selectedValue={selectTypeToAdd}
-            onValueChange={(itemValue, itemIndex) =>
-              setSelectedTypeToAdd(itemValue)
-            }>
-            <Picker.Item label="Tank" value="tank" />
-            <Picker.Item label="Fartyg" value="vessel" />
-          </Picker>
-        </View>
-
-        {selectTypeToAdd === 'tank' ? (
           <View>
+
             <View style={styles.pickerView}>
-              <Text>Typ av bränsle i tanken?</Text>
+              <Text style={[styles.text, styles.textBold]}>Vad vill du lägga till?</Text>
               <Picker
                 style={styles.pickerInput}
-                selectedValue={typeOfFuel}
-                onValueChange={(fuelType, itemIndex) =>
-                  setTypeOfFuel(fuelType)
+                selectedValue={selectTypeToAdd}
+                onValueChange={(itemValue, itemIndex) =>
+                  setSelectedTypeToAdd(itemValue)
                 }>
-                <Picker.Item label="Diesel" value="diesel" />
-                <Picker.Item label="Bensin" value="bensin" />
+                <Picker.Item label="Tank" value="tank" />
+                <Picker.Item label="Fartyg" value="vessel" />
               </Picker>
             </View>
 
-            <View style={styles.pickerView}>
-              <Text>Storlek på tank (anges i liter)</Text>
-              <TextInput
-                style={styles.textInput}
-                keyboardType='number-pad'
-                value={tankSize}
-                onChangeText={setTankSize}
-              />
-            </View>
+            {selectTypeToAdd === 'tank' ? (
+              <View>
+                <View style={styles.pickerView}>
+                  <Text style={[styles.text, styles.textBold]}>Typ av bränsle i tanken?</Text>
+                  <Picker
+                    style={styles.pickerInput}
+                    selectedValue={typeOfFuel}
+                    onValueChange={(fuelType, itemIndex) =>
+                      setTypeOfFuel(fuelType)
+                    }>
+                    <Picker.Item label="Diesel" value="diesel" />
+                    <Picker.Item label="Bensin" value="bensin" />
+                  </Picker>
+                </View>
 
-            <View style={styles.pickerView}>
-              <Text>Namn på tanken</Text>
-              <TextInput
-                style={styles.textInput}
-                keyboardType='default'
-                value={tankName}
-                onChangeText={setTankName}
-              />
-            </View>
+                <View style={styles.pickerView}>
+                  <Text style={[styles.text, styles.textBold]}>Storlek på tank (anges i liter)</Text>
+                  <TextInput
+                    style={styles.textInput}
+                    keyboardType='number-pad'
+                    value={tankSize}
+                    onChangeText={setTankSize}
+                  />
+                </View>
 
-            <Pressable style={styles.saveButton} onPress={() => saveToFirebase()}>
-              <Text>Spara</Text>
-            </Pressable>
+                <View style={styles.pickerView}>
+                  <Text style={[styles.text, styles.textBold]}>Namn på tanken</Text>
+                  <TextInput
+                    style={styles.textInput}
+                    keyboardType='default'
+                    value={tankName}
+                    onChangeText={setTankName}
+                  />
+                </View>
+              </View>
+            ) : (
+              <View>
+                <View style={styles.pickerView}>
+                  <Text style={[styles.text, styles.textBold]}>Fartygets namn</Text>
+                  <TextInput
+                    style={styles.textInput}
+                    keyboardType='default'
+                    value={vesselName}
+                    onChangeText={setVesselName}
+                  />
+                </View>
+              </View>
+            )}
+
           </View>
-        ) : (
-          <View>
-            <View style={styles.pickerView}>
-              <Text>Fartygets namn</Text>
-              <TextInput
-                style={styles.textInput}
-                keyboardType='default'
-                value={vesselName}
-                onChangeText={setVesselName}
-              />
-            </View>
 
-            <Pressable style={styles.saveButton} onPress={() => saveToFirebase()}>
-              <Text>Spara</Text>
-            </Pressable>
-          </View>
-        )}
+          <Pressable style={styles.saveButton} onPress={() => saveToFirebase()}>
+            <Text style={[styles.text, styles.textBold, styles.saveButtonText]}>Spara</Text>
+          </Pressable>
 
-      </View>
+        </View>
+
+
+
+      </ScrollView>
+
+
 
     </View>
   )
@@ -142,27 +153,53 @@ export default CreateScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    marginTop: 30,
+    flexDirection: 'column',
+    backgroundColor: appColors.mediumBlue,
   },
   contentContainer: {
+    height: screenHeigt - 200,
     alignItems: 'center',
-    marginTop: 25
+    justifyContent: 'space-between',
   },
   pickerView: {
+
     marginBottom: 10
   },
   pickerInput: {
-    height: 30,
+    height: 52,
     width: 250,
+    marginTop: 10,
+    backgroundColor: appColors.mistBlue
   },
   textInput: {
-    height: 30,
+    height: 52,
     width: 250,
-    borderRadius: 2,
+    borderRadius: 5,
     borderWidth: 1,
     paddingLeft: 5,
+    marginTop: 10,
     backgroundColor: 'white'
   },
+  text: {
+    fontFamily: 'Roboto',
+    fontSize: 15,
+    color: appColors.white
+  },
+  textBold: {
+    fontWeight: 'bold',
+  },
   saveButton: {
-
+    height: 52,
+    width: 250,
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    borderRadius: 10,
+    marginBottom: 25,
+    backgroundColor: appColors.lightBlue
+  },
+  saveButtonText: {
+    textTransform: 'uppercase'
   }
 })

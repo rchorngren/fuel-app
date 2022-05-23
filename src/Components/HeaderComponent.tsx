@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React from "react";
 import { View, Text, StyleSheet, Pressable } from "react-native";
+import appColors from "../../assets/Styles/appColors";
 import { SettingsScreens } from "../helpers/types";
 
 const HeaderComponent = ({ functionToTrigger, headerTitle }: any) => {
@@ -26,11 +27,11 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     height: 75,
-    marginTop: 30,
+    marginBottom: 25,
     alignItems: 'center',
     justifyContent: 'center',
     borderBottomWidth: 1,
-    backgroundColor: 'gray'
+    backgroundColor: appColors.darkBlue
   },
   backNavButton: {
     position: 'absolute',
@@ -38,6 +39,8 @@ const styles = StyleSheet.create({
     padding: 10
   },
   headerText: {
-    fontSize: 24
+    fontSize: 24,
+    fontFamily: 'Roboto',
+    color: appColors.white
   }
 });
