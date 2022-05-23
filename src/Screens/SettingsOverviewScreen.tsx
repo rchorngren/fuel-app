@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useContext } from "react";
 import { View, Text, Pressable, StyleSheet } from "react-native";
+import appColors from "../../assets/Styles/appColors";
 import { Context } from "../context/Context";
 import { SettingsScreens } from "../helpers/types";
 
@@ -34,11 +35,11 @@ const SettingsOverviewScreen: React.FC<ISettingsOverviewScreen> = (props) => {
       <View style={styles.buttonContainer}>
 
         <Pressable style={[styles.button]} onPress={() => navigate('CreateScreen')}>
-          <Text style={styles.buttonText}>Lägg till...</Text>
+          <Text style={styles.buttonText}>Lägg till</Text>
         </Pressable>
 
         <Pressable style={[styles.button]} onPress={() => navigate('RemoveScreen')}>
-          <Text style={styles.buttonText}>Ta bort...</Text>
+          <Text style={styles.buttonText}>Ta bort</Text>
         </Pressable>
       </View>
 
@@ -56,6 +57,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+    marginTop: 30,
+    backgroundColor: appColors.mediumBlue
   },
   buttonContainer: {
     flex: 1,
@@ -68,13 +71,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderRadius: 5,
-    marginBottom: 20
+    marginBottom: 20,
+    backgroundColor: appColors.mistBlue
   },
   logoutButton: {
-    backgroundColor: 'red',
-    // marginBottom: 20,
+    backgroundColor: appColors.yellow,
   },
   buttonText: {
-    fontSize: 18
+    fontSize: 18,
+    fontFamily: 'Roboto',
+    textTransform: 'uppercase'
   }
 })
