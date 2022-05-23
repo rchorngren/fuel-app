@@ -7,6 +7,7 @@ import { SettingsScreens } from "../helpers/types";
 
 //@ts-ignore
 import { getFirestore, getDocs, collection, doc, deleteDoc } from "firebase/firestore";
+import appColors from "../../assets/Styles/appColors";
 
 interface IRemoveScreen extends NativeStackScreenProps<SettingsScreens, 'RemoveScreen'> { }
 
@@ -62,7 +63,7 @@ const RemoveScreen: React.FC<IRemoveScreen> = (props) => {
           <View style={styles.listItemView} key={index}>
             <Text style={styles.itemText}>{item.name}</Text>
             <Pressable onPress={() => removeItem(item.id, item.type)}>
-              <Text>Radera</Text>
+              <Text style={[styles.baseText, styles.deleteText]}>Radera</Text>
             </Pressable>
           </View>
         )
@@ -79,7 +80,7 @@ const RemoveScreen: React.FC<IRemoveScreen> = (props) => {
           <View style={styles.listItemView} key={index}>
             <Text style={styles.itemText}>{item.name}</Text>
             <Pressable onPress={() => removeItem(item.id, item.type, item.fuel)}>
-              <Text>Radera</Text>
+              <Text style={[styles.baseText, styles.deleteText]}>Radera</Text>
             </Pressable>
           </View>
         )
@@ -140,12 +141,12 @@ const RemoveScreen: React.FC<IRemoveScreen> = (props) => {
       <View style={styles.contentView}>
 
         <View style={styles.itemView}>
-          <Text style={styles.headlineText}>Fartyg</Text>
+          <Text style={[styles.headlineText, styles.baseText]}>Fartyg</Text>
           {vesselList}
         </View>
 
         <View style={styles.itemView}>
-          <Text style={styles.headlineText}>Tankar</Text>
+          <Text style={[styles.headlineText, styles.baseText]}>Tankar</Text>
           {tankList}
         </View>
 
@@ -158,12 +159,13 @@ export default RemoveScreen;
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    marginTop: 30,
+    backgroundColor: appColors.mediumBlue
   },
   contentView: {
     width: '100%',
     alignItems: 'center',
-    marginTop: 25
   },
   itemView: {
     width: '100%',
@@ -177,13 +179,24 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     padding: 20,
     marginBottom: 10,
-    backgroundColor: 'hotpink'
+    borderRadius: 10,
+    backgroundColor: appColors.lightBlue
+  },
+  baseText: {
+    fontFamily: 'Roboto',
+    color: appColors.white
   },
   headlineText: {
     fontSize: 24,
     marginBottom: 10
   },
   itemText: {
-    fontSize: 18
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  deleteText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: appColors.yellow
   }
 })
