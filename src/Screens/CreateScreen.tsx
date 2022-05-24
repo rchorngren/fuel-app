@@ -12,7 +12,6 @@ import appColors from "../../assets/Styles/appColors";
 
 interface ICreateScreen extends NativeStackScreenProps<SettingsScreens, 'CreateScreen'> { }
 
-// const screenWidth = Dimensions.get('screen').width;
 const screenHeigt = Dimensions.get('screen').height;
 
 const CreateScreen: React.FC<ICreateScreen> = (props) => {
@@ -30,7 +29,8 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
   }
 
   const saveToFirebase = async () => {
-    const uid = context?.authedUserUid
+    const uid = context?.authedUserUid;
+
     if (selectTypeToAdd === 'tank') {
       const docRef = await addDoc(collection(firestore, uid, selectTypeToAdd, typeOfFuel), {
         type: selectTypeToAdd,
@@ -38,12 +38,21 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
         size: parseInt(tankSize),
         name: tankName,
         fuelLevel: 0,
-        id: ''
+        id: '',
+        logId: ''
+      });
+
+      const docRefLogs = await addDoc(collection(firestore, uid, 'log', docRef.id), {
+        name: tankName,
+        logs: [],
+        created: new Date(),
+        owner: docRef.id
       });
 
       await updateDoc(docRef, {
-        id: docRef.id
-      })
+        id: docRef.id,
+        logId: docRefLogs.id,
+      });
     }
     else if (selectTypeToAdd === 'vessel') {
       const docRef = await addDoc(collection(firestore, uid, selectTypeToAdd, 'ship'), {
@@ -54,6 +63,12 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
 
       await updateDoc(docRef, {
         id: docRef.id
+      })
+
+      await addDoc(collection(firestore, uid, 'log', docRef.id), {
+        name: vesselName,
+        logs: [],
+        created: new Date()
       })
     }
 
