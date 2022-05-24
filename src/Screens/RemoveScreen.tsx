@@ -197,6 +197,6 @@ const styles = StyleSheet.create({
   deleteText: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: appColors.yellow
+    color: 'red'
   }
 })

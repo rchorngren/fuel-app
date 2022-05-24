@@ -75,15 +75,38 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
 
   const saveBunkerAndNavBack = async () => {
     const uid = context?.authedUserUid;
+    const today = new Date();
+    let currentLogs: any = [];
     const newFuelLevel = tank.fuelLevel + parseInt(refuelAmount);
     const docRef = doc(firestore, uid, tank.type, tank.fuel, tank.id);
+    const docRefLog = doc(firestore, uid, 'log', tank.id, tank.logId);
+    const logsSnapshot = await getDocs(collection(firestore, uid, 'log', tank.id));
+
+    const logEntry = {
+      date: today,
+      volume: parseInt(refuelAmount),
+      purpose: 'bunker',
+      vessel: ''
+    }
+
+    if (logsSnapshot) {
+      logsSnapshot.forEach((doc: any) => {
+        let data = doc.data();
+        currentLogs = data.logs;
+      });
+
+      currentLogs.push(logEntry)
+    }
 
     await updateDoc(docRef, {
       fuelLevel: newFuelLevel
     });
 
-    updateLocalTanks();
+    await updateDoc(docRefLog, {
+      logs: currentLogs
+    })
 
+    updateLocalTanks();
     setShowModal(false);
     setRefuelVesselView(false);
     setRefuelAmount('0');
@@ -91,15 +114,39 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
 
   const saveFuelingAndNavBack = async () => {
     const uid = context?.authedUserUid;
+    const today = new Date();
+    let currentLogs: any = [];
     const newFuelLevel = tank.fuelLevel - parseInt(fuelingAmount);
     const docRef = doc(firestore, uid, tank.type, tank.fuel, tank.id);
+    const docRefLog = doc(firestore, uid, 'log', tank.id, tank.logId);
+    const logsSnapshot = await getDocs(collection(firestore, uid, 'log', tank.id));
+
+    const logEntry = {
+      date: today,
+      volume: parseInt(fuelingAmount),
+      purpose: 'fueling',
+      vessel: selectedVessel
+    }
+
+    console.log('logEntry: ', logEntry);
+
+    if (logsSnapshot) {
+      logsSnapshot.forEach((doc: any) => {
+        let data = doc.data();
+        currentLogs = data.logs;
+      });
+      currentLogs.push(logEntry);
+    }
 
     await updateDoc(docRef, {
       fuelLevel: newFuelLevel
     });
 
-    updateLocalTanks();
+    await updateDoc(docRefLog, {
+      logs: currentLogs
+    })
 
+    updateLocalTanks();
     setShowModal(false);
     setRefuelVesselView(false);
     setRefuelAmount('0');
@@ -107,8 +154,11 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
 
   const vesselPicker = () => {
     const data = availableVessels;
-
     if (data) {
+
+      if (data.length > 0) {
+        setSelectedVessel(data[0].name);
+      }
       setVesselItems(data.map((item: any, index: number) => {
         return (
           <Picker.Item label={item.name} value={item.name} key={index} />
@@ -120,6 +170,7 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
   const loadVessels = async () => {
     const uid = context?.authedUserUid;
     const vesselsSnapshot = await getDocs(collection(firestore, uid, 'vessel', 'ship'));
+
     vesselsSnapshot.forEach((doc: any) => {
       let data = doc.data();
       //@ts-ignore
@@ -185,11 +236,12 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
           ) : (
             <View style={styles.modalContent}>
               <View style={styles.modalHeaderView}>
-                <Text style={styles.text}>Bunkra {tank.name}</Text>
+                <Text style={[styles.text, styles.headLineText]}>Bunkra {tank.name}</Text>
+                <Text style={styles.text}>Volym {tank.fuelLevel} / {tank.size}</Text>
               </View>
 
-              <Text style={styles.text}>Volym {tank.fuelLevel} / {tank.size}</Text>
-              <Text style={styles.text}>Mängd bunker:</Text>
+
+              <Text style={[styles.text, styles.itemText]}>Mängd bunker:</Text>
               <TextInput
                 style={styles.textInput}
                 keyboardType='number-pad'
@@ -199,7 +251,7 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
 
               <View style={styles.buttonView}>
                 <Pressable style={styles.actionButton} onPress={() => saveBunkerAndNavBack()}>
-                  <Text style={[styles.text, styles.buttonText]}>Spara</Text>
+                  <Text style={[styles.text, styles.buttonText]}>Spara!</Text>
                 </Pressable>
 
                 <Pressable style={[styles.actionButton, styles.cancelButton]} onPress={() => cancelModal()}>
