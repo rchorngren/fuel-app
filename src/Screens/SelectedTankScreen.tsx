@@ -155,7 +155,6 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
   const vesselPicker = () => {
     const data = availableVessels;
     if (data) {
-
       if (data.length > 0) {
         setSelectedVessel(data[0].name);
       }
