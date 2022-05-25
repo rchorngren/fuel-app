@@ -14,6 +14,8 @@ const LogScreen = () => {
   const [selectedTank, setSelectedTank] = useState<any>('');
   const [tankPickerItems, setTankPickerItems] = useState<any>();
 
+
+
   const context = useContext(Context);
   const firestore = getFirestore();
 
@@ -36,8 +38,10 @@ const LogScreen = () => {
   }, [selectedTank]);
 
   useEffect(() => {
-    tankPicker();
-  }, [])
+    if (context?.availableTanks.length > 0) {
+      tankPicker();
+    }
+  }, [context?.availableTanks])
 
   return (
     <View style={styles.container}>
