@@ -77,6 +77,12 @@ const LogScreen = () => {
           }
 
         }))
+      } else {
+        setLogsToDisplay(
+          <View style={styles.logEntry}>
+            <Text>Inga loggar att visa</Text>
+          </View>
+        )
       }
     })
   }
@@ -89,6 +95,7 @@ const LogScreen = () => {
 
   useEffect(() => {
     if (context?.availableTanks.length > 0) {
+      console.log('tanks available changed!');
       tankPicker();
     }
   }, [context?.availableTanks]);
