@@ -39,6 +39,7 @@ const RemoveScreen: React.FC<IRemoveScreen> = (props) => {
       return el.id != id;
     });
     setAvailableTanks(filtered);
+    context?.setAvailableTanks(filtered);
   }
 
   const removeItem = async (id: string, type: string, fuel?: string) => {

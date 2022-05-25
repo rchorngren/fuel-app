@@ -27,9 +27,11 @@ const HomeOverviewScreen: React.FC<IHomeOverviewScreen> = (props) => {
   }
 
   const buildContent = () => {
+    console.log('builContent')
     const data = context?.availableTanks;
-
-    if (data) {
+    console.log('data: ', data)
+    if (data.length > 0) {
+      data.sort((a: any, b: any) => a.name.localeCompare(b.name))
       setContent(data.map((item: any, index: number) => {
         return (
           <Pressable style={styles.tankContainer} onPress={() => navigateToTank(item)} key={index}>
@@ -88,8 +90,7 @@ const HomeOverviewScreen: React.FC<IHomeOverviewScreen> = (props) => {
   }, [isFocused]);
 
   useEffect(() => {
-
-    if (context?.availableTanks) {
+    if (context?.availableTanks.length > 0) {
       buildContent();
     }
   }, [context?.availableTanks]);
