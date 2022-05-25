@@ -5,7 +5,7 @@ import appColors from "../../assets/Styles/appColors";
 import { Context } from "../context/Context";
 
 //@ts-ignore
-import { getFirestore, getDocs, collection, updateDoc, doc } from "firebase/firestore";
+import { getFirestore, getDocs, collection } from "firebase/firestore";
 
 const screenWidth = Dimensions.get('screen').width;
 
@@ -21,6 +21,7 @@ const LogScreen = () => {
 
   const tankPicker = () => {
     const data = context?.availableTanks;
+    data.sort((a: any, b: any) => a.name.localeCompare(b.name));
     if (data.length > 0) {
       setSelectedTankId(data[0].id);
       setTankPickerItems(data.map((item: any, index: number) => {
@@ -95,8 +96,10 @@ const LogScreen = () => {
 
   useEffect(() => {
     if (context?.availableTanks.length > 0) {
-      console.log('tanks available changed!');
       tankPicker();
+      if (selectedTankId !== '') {
+        fetchAndDisplayLogs();
+      }
     }
   }, [context?.availableTanks]);
 
