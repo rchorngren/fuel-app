@@ -58,7 +58,7 @@ const LogScreen = () => {
                 <Text style={[styles.logText, styles.logTextEven]}>Aktivitet: {item.purpose}</Text>
                 <Text style={[styles.logText, styles.logTextEven]}>Volym: {item.volume} liter</Text>
                 {item.vessel ? (
-                  <Text style={[styles.logText, styles.logTextEven]}>Fordon: {item.vessel}</Text>
+                  <Text style={[styles.logText, styles.logTextEven]}>Fartyg: {item.vessel}</Text>
                 ) : (null)}
               </View>
             )
@@ -71,7 +71,7 @@ const LogScreen = () => {
                 <Text style={[styles.logText, styles.logTextOdd]}>Aktivitet: {item.purpose}</Text>
                 <Text style={[styles.logText, styles.logTextOdd]}>Volym: {item.volume} liter</Text>
                 {item.vessel ? (
-                  <Text style={[styles.logText, styles.logTextOdd]}>Fordon: {item.vessel}</Text>
+                  <Text style={[styles.logText, styles.logTextOdd]}>Fartyg: {item.vessel}</Text>
                 ) : (null)}
               </View>
             )
