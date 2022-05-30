@@ -90,7 +90,9 @@ const LogScreen = () => {
 
   useEffect(() => {
     if (selectedTankId !== '') {
-      fetchAndDisplayLogs();
+      if (selectedTankId !== null) {
+        fetchAndDisplayLogs();
+      }
     }
   }, [selectedTankId]);
 
@@ -98,8 +100,12 @@ const LogScreen = () => {
     if (context?.availableTanks.length > 0) {
       tankPicker();
       if (selectedTankId !== '') {
-        fetchAndDisplayLogs();
+        if (selectedTankId !== null) {
+          fetchAndDisplayLogs();
+        }
       }
+    } else {
+      setTankPickerItems(null)
     }
   }, [context?.availableTanks]);
 
