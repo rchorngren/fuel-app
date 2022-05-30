@@ -166,6 +166,6 @@ const styles = StyleSheet.create({
     color: appColors.white
   },
   registerText: {
-    color: 'white'
+    color: appColors.white
   }
 })
