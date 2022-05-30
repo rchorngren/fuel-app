@@ -17,7 +17,7 @@ const screenHeigt = Dimensions.get('screen').height;
 const CreateScreen: React.FC<ICreateScreen> = (props) => {
   const [selectTypeToAdd, setSelectedTypeToAdd] = useState<string>('tank');
   const [typeOfFuel, setTypeOfFuel] = useState<string>('diesel');
-  const [tankSize, setTankSize] = useState<string>('0');
+  const [tankSize, setTankSize] = useState<string>('');
   const [tankName, setTankName] = useState<string>('');
   const [vesselName, setVesselName] = useState<string>('');
 
@@ -31,7 +31,18 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
   const saveToFirebase = async () => {
     const uid = context?.authedUserUid;
 
+    const checkForValue = (valueToCheck: string) => {
+      if (valueToCheck === '') {
+        console.log('no value given')
+      }
+    }
+
     if (selectTypeToAdd === 'tank') {
+      if ((tankName || tankSize) === "") {
+        console.log('No name or size given, unable to save');
+        return;
+      }
+
       const docRef = await addDoc(collection(firestore, uid, selectTypeToAdd, typeOfFuel), {
         type: selectTypeToAdd,
         fuel: typeOfFuel,
@@ -55,6 +66,11 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
       });
     }
     else if (selectTypeToAdd === 'vessel') {
+      if (vesselName === '') {
+        console.log('No name given, unable to save');
+        return;
+      }
+
       const docRef = await addDoc(collection(firestore, uid, selectTypeToAdd, 'ship'), {
         type: selectTypeToAdd,
         name: vesselName,
@@ -71,7 +87,7 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
         created: new Date()
       })
     }
-
+    navigateBack();
   }
 
   return (
@@ -79,8 +95,6 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
       <HeaderComponent functionToTrigger={navigateBack} headerTitle={"Lägg till"} />
       <ScrollView>
         <View style={styles.contentContainer}>
-
-
           <View>
 
             <View style={styles.pickerView}>
@@ -144,7 +158,6 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
                 </View>
               </View>
             )}
-
           </View>
 
           <Pressable style={styles.saveButton} onPress={() => saveToFirebase()}>
@@ -152,13 +165,7 @@ const CreateScreen: React.FC<ICreateScreen> = (props) => {
           </Pressable>
 
         </View>
-
-
-
       </ScrollView>
-
-
-
     </View>
   )
 }

@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
 import HeaderComponent from "../Components/HeaderComponent";
 import { Context } from "../context/Context";
 import { SettingsScreens } from "../helpers/types";
@@ -52,7 +52,19 @@ const RemoveScreen: React.FC<IRemoveScreen> = (props) => {
       await deleteDoc(doc(firestore, uid, 'tank', fuel, id))
       updateAvailableTanks(id);
     }
+  }
 
+  const displayAlert = (id: string, type: string, name: string, fuel?: string) => {
+    Alert.alert('Radera', 'Är du säker att du vill radera ' + name + '?', [
+      {
+        text: 'Avbryt',
+        style: 'cancel'
+      },
+      {
+        text: 'OK',
+        onPress: () => removeItem(id, type, fuel)
+      }
+    ]);
   }
 
   const buildVessels = () => {
@@ -63,7 +75,7 @@ const RemoveScreen: React.FC<IRemoveScreen> = (props) => {
         return (
           <View style={styles.listItemView} key={index}>
             <Text style={styles.itemText}>{item.name}</Text>
-            <Pressable onPress={() => removeItem(item.id, item.type)}>
+            <Pressable onPress={() => displayAlert(item.id, item.type, item.name)}>
               <Text style={[styles.baseText, styles.deleteText]}>Radera</Text>
             </Pressable>
           </View>
@@ -80,7 +92,7 @@ const RemoveScreen: React.FC<IRemoveScreen> = (props) => {
         return (
           <View style={styles.listItemView} key={index}>
             <Text style={styles.itemText}>{item.name}</Text>
-            <Pressable onPress={() => removeItem(item.id, item.type, item.fuel)}>
+            <Pressable onPress={() => displayAlert(item.id, item.type, item.name, item.fuel,)}>
               <Text style={[styles.baseText, styles.deleteText]}>Radera</Text>
             </Pressable>
           </View>

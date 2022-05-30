@@ -16,8 +16,8 @@ interface ISelectedTankScreen extends NativeStackScreenProps<HomeScreens, 'Selec
 const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [refuelVesselView, setRefuelVesselView] = useState<boolean>(false);
-  const [refuelAmount, setRefuelAmount] = useState<string>('0');
-  const [fuelingAmount, setFuelingAmount] = useState<string>('0');
+  const [refuelAmount, setRefuelAmount] = useState<string>('');
+  const [fuelingAmount, setFuelingAmount] = useState<string>('');
 
   const [selectedVessel, setSelectedVessel] = useState<string>('');
   const [availableVessels, setAvailableVessels] = useState<any>([]);
@@ -74,6 +74,11 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
   }
 
   const saveBunkerAndNavBack = async () => {
+    if (refuelAmount === '') {
+      console.log('no fuel level specified, unable to save');
+      return;
+    }
+
     const uid = context?.authedUserUid;
     const today = new Date();
     let currentLogs: any = [];
@@ -81,6 +86,8 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
     const docRef = doc(firestore, uid, tank.type, tank.fuel, tank.id);
     const docRefLog = doc(firestore, uid, 'log', tank.id, tank.logId);
     const logsSnapshot = await getDocs(collection(firestore, uid, 'log', tank.id));
+
+
 
     const logEntry = {
       date: today,
@@ -113,6 +120,11 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
   }
 
   const saveFuelingAndNavBack = async () => {
+    if (fuelingAmount === '') {
+      console.log('No fueling amount specified, unable to save');
+      return;
+    }
+
     const uid = context?.authedUserUid;
     const today = new Date();
     let currentLogs: any = [];
