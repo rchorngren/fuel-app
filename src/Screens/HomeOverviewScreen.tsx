@@ -27,9 +27,7 @@ const HomeOverviewScreen: React.FC<IHomeOverviewScreen> = (props) => {
   }
 
   const buildContent = () => {
-    console.log('builContent')
     const data = context?.availableTanks;
-    console.log('data: ', data)
     if (data.length > 0) {
       data.sort((a: any, b: any) => a.name.localeCompare(b.name))
       setContent(data.map((item: any, index: number) => {
@@ -41,6 +39,13 @@ const HomeOverviewScreen: React.FC<IHomeOverviewScreen> = (props) => {
           </Pressable>
         )
       }))
+    } else {
+      setContent(
+        <View style={styles.noBunkerView}>
+          <Text style={styles.noBunkerText}>Du har inte skapat någon tank än.</Text>
+          <Text style={styles.noBunkerText}>Klicka på <Text style={[styles.noBunkerText, styles.textBold]}>Inställningar</Text> och sen <Text style={[styles.noBunkerText, styles.textBold]}>Lägg till</Text> för att komma igång.</Text>
+        </View>
+      )
     }
   }
 
@@ -145,6 +150,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-evenly',
     marginTop: 10
   },
+  noBunkerView: {
+    margin: 10
+  },
   bunkerButton: {
     height: 50,
     width: 50,
@@ -174,5 +182,13 @@ const styles = StyleSheet.create({
   },
   tankText: {
     fontSize: 16
+  },
+  noBunkerText: {
+    fontSize: 16,
+    marginBottom: 5,
+    color: appColors.white
+  },
+  textBold: {
+    fontWeight: 'bold'
   }
 })
