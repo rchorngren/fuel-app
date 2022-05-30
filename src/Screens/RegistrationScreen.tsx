@@ -8,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 //@ts-ignore
 import backgroundImg from "../../assets/images/background.png";
 import FuelPump from "../../assets/svg/FuelPump";
+import appColors from "../../assets/Styles/appColors";
 
 const screenWidth = Dimensions.get('screen').width;
 const screenHeight = Dimensions.get('screen').height;
@@ -84,7 +85,7 @@ const RegistrationView: React.FC<IRegistrationView> = (props) => {
           />
 
           <Pressable style={styles.registrationButton} onPress={() => createUser(userName, password)}>
-            <Text>Registrera</Text>
+            <Text style={styles.buttonText}>Registrera</Text>
           </Pressable>
         </View>
 
@@ -153,14 +154,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderRadius: 5,
-    backgroundColor: 'lightgray'
+    backgroundColor: appColors.mediumBlue
   },
   loginNavButton: {
     position: 'absolute',
     padding: 10,
     bottom: 25
   },
+  buttonText: {
+    textTransform: 'uppercase',
+    color: appColors.white
+  },
   loginText: {
-    color: 'white'
+    color: appColors.white
   }
 })

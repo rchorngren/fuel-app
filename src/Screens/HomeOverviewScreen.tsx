@@ -151,7 +151,8 @@ const styles = StyleSheet.create({
     marginTop: 10
   },
   noBunkerView: {
-    margin: 10
+    width: '90%',
+    marginLeft: 15,
   },
   bunkerButton: {
     height: 50,
