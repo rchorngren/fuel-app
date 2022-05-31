@@ -19,9 +19,10 @@ interface ILoginView extends NativeStackScreenProps<LandingScreens, 'LoginScreen
 const LoginView: React.FC<ILoginView> = (props) => {
   const [userName, setUserName] = useState<string>('');
   const [password, setPassword] = useState('');
+  const [displayError, setDisplayError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
 
   const context = useContext(Context);
-
   const auth = getAuth();
 
   const storeUser = async (user: string) => {
@@ -32,21 +33,29 @@ const LoginView: React.FC<ILoginView> = (props) => {
     }
   }
 
+  const errorHandler = (errorMsg: string) => {
+    setErrorMessage(errorMsg);
+    setDisplayError(true);
+    setTimeout(() => {
+      setDisplayError(false);
+      setErrorMessage('');
+    }, 4000);
+  }
+
   const loginUser = (email: string, password: string) => {
     if (email && password != '') {
       signInWithEmailAndPassword(auth, email, password)
         .then((userCredentials) => {
-          // console.log('Signed in: ', userCredentials.user);
           const userStrigify = JSON.stringify(userCredentials.user);
           storeUser(userStrigify);
           context?.setAuthed(true);
         })
         .catch((error) => {
-          console.log('There was an error while signing in: ', error);
+          errorHandler(error.code);
         })
     }
     else {
-      console.log('Please make sure your username and password is filled in correctly');
+      errorHandler('Kontrollera dina uppgifter');
     }
 
   }
@@ -84,10 +93,18 @@ const LoginView: React.FC<ILoginView> = (props) => {
             onChangeText={setPassword}
           />
 
-          <Pressable style={styles.loginButton} onPress={() => loginUser(userName, password)}>
-            <Text style={styles.buttonText}>Logga in</Text>
-          </Pressable>
+          {displayError ? (
+            <View style={styles.errorView}>
+              <Text style={styles.errorText}>{errorMessage}</Text>
+            </View>
+          ) : (
+            <Pressable style={styles.loginButton} onPress={() => loginUser(userName, password)}>
+              <Text style={styles.buttonText}>Logga in</Text>
+            </Pressable>
+          )}
         </View>
+
+
 
         <Pressable style={styles.registerNavButton} onPress={() => toggleRegistration()}>
           <Text style={styles.registerText}>Registrera ny användare</Text>
@@ -138,6 +155,15 @@ const styles = StyleSheet.create({
     marginBottom: 250,
     backgroundColor: 'rgba(255, 255, 255, 0.5)'
   },
+  errorView: {
+    height: 31,
+    width: 250,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderRadius: 5,
+    backgroundColor: appColors.yellow
+  },
   loginInput: {
     height: 31,
     width: 250,
@@ -167,5 +193,10 @@ const styles = StyleSheet.create({
   },
   registerText: {
     color: appColors.white
+  },
+  errorText: {
+    textTransform: 'uppercase',
+    fontWeight: 'bold',
+    color: 'black'
   }
 })
