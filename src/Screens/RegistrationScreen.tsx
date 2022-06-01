@@ -38,7 +38,7 @@ const RegistrationView: React.FC<IRegistrationView> = (props) => {
     setTimeout(() => {
       setDisplayError(false);
       setErrorMessage('');
-    }, 5000);
+    }, 4000);
   }
 
   const createUser = (email: string, password: string) => {
