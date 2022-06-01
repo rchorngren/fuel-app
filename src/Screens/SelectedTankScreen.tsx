@@ -262,7 +262,7 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
 
               <View style={styles.buttonView}>
                 <Pressable style={styles.actionButton} onPress={() => saveBunkerAndNavBack()}>
-                  <Text style={[styles.text, styles.buttonText]}>Spara!</Text>
+                  <Text style={[styles.text, styles.buttonText]}>Spara</Text>
                 </Pressable>
 
                 <Pressable style={[styles.actionButton, styles.cancelButton]} onPress={() => cancelModal()}>
@@ -325,7 +325,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     position: 'absolute',
-    top: 120,
+    top: 115,
     left: '5%',
     right: '5%',
     width: '90%',
@@ -337,6 +337,7 @@ const styles = StyleSheet.create({
     zIndex: 100
   },
   modalContent: {
+    width: '80%',
     marginTop: 20
   },
   modalHeaderView: {
