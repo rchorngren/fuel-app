@@ -140,8 +140,6 @@ const SelectedTankScreen: React.FC<ISelectedTankScreen> = (props) => {
       vessel: selectedVessel
     }
 
-    console.log('logEntry: ', logEntry);
-
     if (logsSnapshot) {
       logsSnapshot.forEach((doc: any) => {
         let data = doc.data();
